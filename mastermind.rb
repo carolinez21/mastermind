@@ -1,33 +1,22 @@
-#red, orange, yellow, green, blue, purple - R, O, Y, G, B, P
-
 OPTIONS = ['R', 'O', 'Y', 'G', 'B', 'P']
 
 class Game
-
   def initialize(codemaker, codebreaker)
     @codemaker = codemaker
     @codebreaker = codebreaker
   end
 
   def play
-    p @codemaker.code
-  # print codebreaker make a guess of 4 colors - can include duplicates
-  # check with the actual code
-  # loop until correct guess or guessed 12 times
     loop do
       guess = @codebreaker.make_guess
-      #p guess
-      # check if guess is correct
       if correct?(guess)
-        puts 'Nice job! You cracked the secret code :)'
+        puts "\nNice job! You cracked the secret code :)"
         return
       elsif game_over?
-        puts 'Dangit! You ran out of guesses :('
+        puts "\nDangit! You ran out of guesses :( The secret code was: #{@codemaker.code.join('')}."
         return
       else
-        #codemaker provides feedback
-        puts ""
-        puts 'Codemaker feedback: '
+        puts "\nCodemaker feedback: "
         @codemaker.feedback(guess)
         puts "You have #{@codebreaker.guesses_left} guesses left. Try again.\n\n"
       end
@@ -51,7 +40,6 @@ class Codemaker
   end
 
   def feedback(guess)
-    # guess.each_with_index { |peg, index| print 'B ' if peg == @code[index] }
     leftover_guess = []
     leftover_code = []
     guess.each_with_index do |peg, index|
@@ -64,7 +52,6 @@ class Codemaker
     end
 
     leftover_guess.uniq.each { |peg| print 'W ' if leftover_code.include?(peg) }
-    #guess.uniq.each { |peg| print 'W ' if @code.include?(peg) }
     puts ""
   end
 end
@@ -77,15 +64,13 @@ class Codebreaker
   end
 
   def make_guess
-    # check if correct number of letters, and if correct letters
-    puts '*R = red, O = orange, Y = yellow, G = green, B = blue, P = purple*'
-    puts 'Enter a guess of 4 colors, you can include duplicates: '
-    @guesses_left -= 1
+    puts "*R = red, O = orange, Y = yellow, G = green, B = blue, P = purple*\nEnter a guess of 4 colors, you can include duplicates: "
     guess = gets.chomp.split('')
     until guess_valid?(guess)
-      puts 'Sorry, that is an invalid guess. Your guess must have 4 colors. The colors you can choose from are: R, O, Y, G, B, P. Please enter a valid guess: '
+      puts "\nSorry, that is an invalid guess. Your guess must have 4 colors. The colors you can choose from are: R, O, Y, G, B, P. Please enter a valid guess: "
       guess = gets.chomp.split('')
     end
+    @guesses_left -= 1
     guess
   end
 
